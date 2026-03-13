@@ -2,6 +2,8 @@ import { useBlog } from "@/contexts/BlogContext";
 import PostCard from "@/components/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+import { Gift } from "lucide-react";
+import { Loading } from "@/components/ui/loadin";
 
 const Home = () => {
   const { posts } = useBlog();
@@ -10,7 +12,7 @@ const Home = () => {
 
   const page = (searchParams.get("page") as string) || "1";
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["postsreq", page],
     queryFn: () =>
       fetch(
@@ -37,6 +39,8 @@ const Home = () => {
       <h1 className="mb-8 font-heading text-3xl font-bold text-foreground sm:text-4xl">
         Últimas publicações
       </h1>
+
+      {isFetching && <Loading />}
       {data?.posts.length === 0 ? (
         <p className="text-center text-muted-foreground">
           Nenhum post publicado ainda.

@@ -58,7 +58,7 @@ const PostCard = ({ post }: { post: Post }) => {
 
   return (
     <article className="animate-fade-in overflow-hidden rounded-lg border bg-card shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]">
-      {post.images && (
+      {post.images && post.images.length > 0 && (
         <img
           src={post.images}
           alt={post.title}
