@@ -2,7 +2,6 @@ import { useBlog } from "@/contexts/BlogContext";
 import PostCard from "@/components/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { Gift } from "lucide-react";
 import { Loading } from "@/components/ui/loadin";
 
 const Home = () => {
@@ -27,20 +26,13 @@ const Home = () => {
       ).then((res) => res.json()),
   });
 
-  console.log("meus posts", data);
-
-  const sorted = [...posts].sort(
-    (a, b) =>
-      new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime(),
-  );
-
   return (
     <main className="blog-container">
+      {isFetching && <Loading />}
       <h1 className="mb-8 font-heading text-3xl font-bold text-foreground sm:text-4xl">
         Últimas publicações
       </h1>
 
-      {isFetching && <Loading />}
       {data?.posts.length === 0 ? (
         <p className="text-center text-muted-foreground">
           Nenhum post publicado ainda.
@@ -48,7 +40,7 @@ const Home = () => {
       ) : (
         <div className="space-y-6">
           {data?.posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post._id} post={post} />
           ))}
         </div>
       )}

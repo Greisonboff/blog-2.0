@@ -27,13 +27,20 @@ const CriarPost = () => {
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    criarPost({
+
+    const res = await criarPost({
       title: titulo,
       content: conteudo,
     });
+
+    if (!res?.isValid) {
+      toast.error(res?.message || "Erro ao criar post");
+      return;
+    }
+
     toast.success("Post publicado com sucesso!");
     navigate("/");
   };

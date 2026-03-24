@@ -5,151 +5,152 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import type { User } from "@/types/blog";
 import { LoginApiResponse, UserData } from "@/types/auth.types";
 import { FormDataCadastro } from "@/types/types";
+import { toast } from "sonner";
 
 interface AuthContextType {
   user: UserData | null;
-  users: User[];
+  isLoading: boolean;
   login: (
     email: string,
     senha: string,
-    lembrar: boolean,
-  ) => Promise<LoginApiResponse | null>;
-  cadastrar: (dados: FormDataCadastro) => Promise<LoginApiResponse | null>;
-  logout: () => void;
-  useAuthStatus: () => void;
+    lembrar?: boolean,
+  ) => Promise<LoginApiResponse>;
+  cadastrar: (dados: FormDataCadastro) => Promise<LoginApiResponse>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be inside AuthProvider");
+  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
   return ctx;
 };
-
-const USERS_KEY = "blog_users";
-const SESSION_KEY = "blog_session";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [users, setUsers] = useState<User[]>(() => {
-    const saved = localStorage.getItem(USERS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [user, setUser] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [user, setUser] = useState<User | null>(() => {
-    const saved =
-      localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
-    if (saved) {
-      const u = JSON.parse(saved) as User;
-      // verify user still exists
-      const allUsers: User[] = JSON.parse(
-        localStorage.getItem(USERS_KEY) || "[]",
-      );
-      return allUsers.find((x) => x.id === u.id) || null;
+  const checkAuthStatus = useCallback(async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/person/isAuth`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Erro ao verificar autenticação");
+
+      const data = await res.json();
+      setUser(data.isLoggedIn ? data.user : null);
+    } catch (error) {
+      console.error("Erro ao verificar status:", error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
-    return null;
-  });
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }, [users]);
+    checkAuthStatus();
+  }, [checkAuthStatus]);
 
   const login = async (
     email: string,
     senha: string,
-    lembrar: boolean,
-  ): Promise<LoginApiResponse | null> => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/person/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: senha,
-      }),
-    });
-    console.log("Response status:", res);
+  ): Promise<LoginApiResponse> => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/person/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: senha }),
+      });
 
-    const data = await res.json();
-    if (data.isValid) {
-      setUser(data.user);
-    }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    return data;
-  };
-
-  const cadastrar = async (formData: FormDataCadastro) => {
-    const dataForm = new FormData();
-    // Adiciona os campos normais
-    dataForm.append("name", formData.name);
-    dataForm.append("email", formData.email);
-    dataForm.append("password", formData.password);
-    dataForm.append("confirmPassword", formData.confirmPassword);
-
-    // Adiciona a imagem (se existir)
-    if (formData.img) {
-      dataForm.append("img", formData.img);
-    }
-
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/person/`, {
-      method: "POST",
-      credentials: "include",
-      body: dataForm,
-    });
-
-    const data = await res.json();
-
-    if (data.isValid) {
-      setUser(data.user);
-    }
-
-    return data;
-  };
-
-  const logout = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/person/logout`, {
-      method: "POST",
-      credentials: "include",
-    }).then(async (res) => {
       const data = await res.json();
+
+      if (data.isValid) {
+        setUser(data.user);
+        toast.success("Login realizado com sucesso!");
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Erro no login:", error);
+      const message =
+        error instanceof Error ? error.message : "Erro ao fazer login";
+      toast.error(message);
+      return { isValid: false, message };
+    }
+  };
+
+  const cadastrar = async (
+    formData: FormDataCadastro,
+  ): Promise<LoginApiResponse> => {
+    try {
+      const dataForm = new FormData();
+      dataForm.append("name", formData.name);
+      dataForm.append("email", formData.email);
+      dataForm.append("password", formData.password);
+      dataForm.append("confirmPassword", formData.confirmPassword);
+
+      if (formData.img) {
+        dataForm.append("img", formData.img);
+      }
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/person/`, {
+        method: "POST",
+        credentials: "include",
+        body: dataForm,
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const data = await res.json();
+
+      if (data.isValid) {
+        setUser(data.user);
+        toast.success("Cadastro realizado com sucesso!");
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      const message =
+        error instanceof Error ? error.message : "Erro ao cadastrar";
+      toast.error(message);
+      return { isValid: false, message };
+    }
+  };
+
+  const logout = async (): Promise<void> => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/person/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Erro ao fazer logout");
+
+      const data = await res.json();
+
       if (data.isValid) {
         setUser(null);
+        toast.success("Logout realizado com sucesso!");
       }
-    });
-  };
-
-  const useAuthStatus = () => {
-    useEffect(() => {
-      fetch(`${import.meta.env.VITE_API_URL}/person/isAuth`, {
-        method: "GET",
-        credentials: "include",
-      })
-        .then(async (res) => {
-          const data = await res.json();
-          if (data.isLoggedIn) {
-            setUser(data.user);
-            console.log("user: ", data.user);
-          } else {
-            setUser(null);
-          }
-        })
-        .catch(() => {
-          setUser(null);
-        });
-    }, [setUser]);
+    } catch (error) {
+      console.error("Erro no logout:", error);
+      toast.error("Erro ao fazer logout");
+    }
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, users, login, cadastrar, logout, useAuthStatus }}
-    >
+    <AuthContext.Provider value={{ user, isLoading, login, cadastrar, logout }}>
       {children}
     </AuthContext.Provider>
   );

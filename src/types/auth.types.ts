@@ -30,3 +30,5 @@ export interface LoginErrorResponse {
 
 // Interface unificada (pode ser sucesso ou erro)
 export type LoginApiResponse = LoginResponse | LoginErrorResponse;
+
+export type DefaultResponse = { isValid: boolean; message: string };

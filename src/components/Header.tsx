@@ -4,7 +4,7 @@ import { PenLine, LogOut, User, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const Header = () => {
-  const { user, logout, useAuthStatus } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,8 +25,6 @@ const Header = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-
-  useAuthStatus();
 
   return (
     <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">

@@ -17,13 +17,9 @@ const MeusPosts = () => {
   const [editImagem, setEditImagem] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  // const meusPosts = posts.filter((p) => p.autorId === user.id);
-  const meusPosts = [];
-
-  // const page = (searchParams.get("page") as string) || "1";
-  const page = 1;
+  const page = (searchParams.get("page") as string) || "1";
 
   const { data } = useQuery({
     queryKey: ["posts my posts", page],
@@ -42,22 +38,20 @@ const MeusPosts = () => {
         },
       ).then((res) => res.json()),
   });
-  console.log("meus posts", data);
 
   if (!user) {
     navigate("/login");
     return null;
   }
-  // const totalLikes = meusPosts.reduce((acc, p) => acc + p.likes.length, 0);
 
-  const startEdit = (post: (typeof meusPosts)[0]) => {
+  const startEdit = (post: (typeof data)[0]) => {
     setEditingId(post._id);
     setEditTitulo(post.title);
     setEditConteudo(post.content);
     setEditImagem(post.imagemUrl || "");
   };
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editTitulo.trim()) {
       toast.error("Título é obrigatório");
       return;
@@ -66,14 +60,28 @@ const MeusPosts = () => {
       toast.error("Conteúdo deve ter no mínimo 10 caracteres");
       return;
     }
-    editarPost({ title: editTitulo, content: editConteudo }, editingId!, false);
+    const res = await editarPost(
+      { title: editTitulo, content: editConteudo },
+      editingId!,
+      false,
+    );
+
+    if (!res?.isValid) {
+      toast.error(res?.message || "Erro ao editar post");
+      return;
+    }
+
     setEditingId(null);
     toast.success("Post atualizado!");
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deleteId) {
-      excluirPost(deleteId);
+      const res = await excluirPost(deleteId);
+
+      if (!res?.isValid) {
+        return;
+      }
       setDeleteId(null);
       toast.success("Post excluído!");
     }
@@ -102,7 +110,7 @@ const MeusPosts = () => {
         <div className="space-y-3">
           {data?.posts?.map((post) => (
             <div
-              key={post.id}
+              key={post._id}
               className="animate-fade-in rounded-lg border bg-card p-4"
             >
               {editingId === post._id ? (
