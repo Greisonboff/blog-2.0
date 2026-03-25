@@ -15,7 +15,16 @@ interface BlogContextType {
   ) => Promise<DefaultResponse>;
   excluirPost: (id: string) => Promise<DefaultResponse>;
   toggleLike: (postId: string, userId: string) => void;
-  adicionarComentario: (postId: string, comment: string) => void;
+  adicionarComentario: (
+    postId: string,
+    comment: string,
+  ) => Promise<DefaultResponse>;
+  deleteComment: (id: string, commentId: string) => Promise<DefaultResponse>;
+  editComment: (
+    id: string,
+    commentId: string,
+    comment: string,
+  ) => Promise<DefaultResponse>;
 }
 
 const BlogContext = createContext<BlogContextType | null>(null);
@@ -167,6 +176,55 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
       });
   };
 
+  const deleteComment = async (id: string, commentId: string) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/post/comment/${id}/${commentId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const dataResponse = await res.json();
+
+    if (dataResponse.isValid) {
+      queryClient.invalidateQueries({ queryKey: ["postsreq"] });
+    }
+
+    return dataResponse;
+  };
+
+  const editComment = async (
+    id: string,
+    commentId: string,
+    comment: string,
+  ) => {
+    const data = {
+      content: comment,
+    };
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/post/comment/${id}/${commentId}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    const dataResponse = await res.json();
+
+    if (dataResponse.isValid) {
+      queryClient.invalidateQueries({ queryKey: ["postsreq"] });
+    }
+
+    return dataResponse;
+  };
   return (
     <BlogContext.Provider
       value={{
@@ -176,6 +234,8 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
         excluirPost,
         toggleLike,
         adicionarComentario,
+        deleteComment,
+        editComment,
       }}
     >
       {children}

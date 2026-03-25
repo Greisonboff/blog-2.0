@@ -9,15 +9,20 @@ import {
   ChevronDown,
   ChevronUp,
   Send,
+  Trash2,
+  Pencil,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 
 const PostCard = ({ post }: { post: Post }) => {
   const { user } = useAuth();
-  const { toggleLike, adicionarComentario } = useBlog();
+  const { toggleLike, adicionarComentario, deleteComment, editComment } =
+    useBlog();
   const [expanded, setExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [novoComentario, setNovoComentario] = useState("");
+  const [editingComment, setEditingComment] = useState<string | null>(null);
 
   const isLiked = user ? post.likesData.hasLiked : false;
   const previewText =
@@ -53,6 +58,27 @@ const PostCard = ({ post }: { post: Post }) => {
       }
     } catch (error) {
       // Handle the error here
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    const res = await deleteComment(post._id, commentId);
+
+    if (res.isValid) {
+      toast.success("Comentário excluido!");
+    } else {
+      toast.error("Erro ao excluir comentário");
+    }
+  };
+
+  const handleEditComment = async (commentId: string) => {
+    const res = await editComment(post._id, commentId, editingComment.trim());
+
+    if (res.isValid) {
+      setEditingComment(null);
+      toast.success("Comentário editado!");
+    } else {
+      toast.error("Erro ao editar comentário");
     }
   };
 
@@ -147,9 +173,55 @@ const PostCard = ({ post }: { post: Post }) => {
                     <span>·</span>
                     <time>{formatDate(c.commentedAt)}</time>
                   </div>
-                  <p className="mt-1 text-sm text-secondary-foreground">
-                    {c.comment}
-                  </p>
+                  {editingComment === null ? (
+                    <div className="flex justify-between">
+                      <p className="mt-1 text-sm text-secondary-foreground">
+                        {c.comment}
+                      </p>
+                      {c.isMyComment && (
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => setEditingComment(c.comment)}
+                            className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteComment(c._id)}
+                            className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input
+                        value={editingComment}
+                        onChange={(e) => setEditingComment(e.target.value)}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && handleEditComment(c._id)
+                        }
+                        placeholder="Escreva um comentário..."
+                        className="flex-1 rounded-md border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                      <button
+                        onClick={() => handleEditComment(c._id)}
+                        disabled={!editingComment?.trim()}
+                        className="rounded-md bg-primary p-2 text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+                      >
+                        <Send className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => setEditingComment(null)}
+                        disabled={!editingComment?.trim()}
+                        className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             )}
