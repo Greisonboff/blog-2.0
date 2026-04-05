@@ -4,7 +4,7 @@ export function Loading() {
       <div className="flex flex-col items-center relative">
         <img
           className="w-[180px]"
-          src="../../../public/Loading 50 _ Among_Us.gif"
+          src="Loading 50 _ Among_Us.gif"
           alt="loading"
         />
         <div className="flex items-center gap-1 absolute bottom-[22px]">
