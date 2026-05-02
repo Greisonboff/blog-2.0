@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/formatDate";
 import { Pencil, Trash2, Heart, X } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
+import { Loading } from "@/components/ui/loadin";
 
 const MeusPosts = () => {
   const { user } = useAuth();
@@ -21,7 +22,7 @@ const MeusPosts = () => {
 
   const page = (searchParams.get("page") as string) || "1";
 
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["posts my posts", page],
     queryFn: () =>
       fetch(
@@ -89,6 +90,7 @@ const MeusPosts = () => {
 
   return (
     <main className="blog-container max-w-2xl">
+      {isFetching && <Loading />}
       <h1 className="mb-2 font-heading text-2xl font-bold text-foreground sm:text-3xl">
         Meus Posts
       </h1>
