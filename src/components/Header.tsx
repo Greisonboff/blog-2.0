@@ -55,18 +55,20 @@ const Header = () => {
 
           {user ? (
             <div className="ml-3 flex items-center gap-3">
-              <div className="flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
-                {user.img ? (
-                  <img
-                    src={user.img.url}
-                    alt={user.name}
-                    className="h-6 w-6 rounded-full object-cover"
-                  />
-                ) : (
-                  <User className="h-4 w-4 text-muted-foreground" />
-                )}
-                {/* <span className="text-sm font-medium text-foreground">{user.nome.split(' ')[0]}</span> */}
-              </div>
+              <Link to="/perfil">
+                <div className="flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
+                  {user.img ? (
+                    <img
+                      src={user.img.url}
+                      alt={user.name}
+                      className="h-6 w-6 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-4 w-4 text-muted-foreground" />
+                  )}
+                  {/* <span className="text-sm font-medium text-foreground">{user.nome.split(' ')[0]}</span> */}
+                </div>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"

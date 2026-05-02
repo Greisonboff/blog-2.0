@@ -76,3 +76,9 @@ export interface FormDataPost {
   content: string;
   images?: null | FileList;
 }
+
+export interface FormDataEditarPerfil {
+  name: string;
+  email: string;
+  img?: File | string;
+}

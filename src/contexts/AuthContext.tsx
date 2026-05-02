@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { LoginApiResponse, UserData } from "@/types/auth.types";
-import { FormDataCadastro } from "@/types/types";
+import { FormDataCadastro, FormDataEditarPerfil } from "@/types/types";
 import { toast } from "sonner";
 
 interface AuthContextType {
@@ -18,6 +18,7 @@ interface AuthContextType {
     lembrar?: boolean,
   ) => Promise<LoginApiResponse>;
   cadastrar: (dados: FormDataCadastro) => Promise<LoginApiResponse>;
+  editarPerfil: (dados: FormDataEditarPerfil) => Promise<LoginApiResponse>;
   logout: () => Promise<void>;
 }
 
@@ -149,8 +150,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const editarPerfil = async (
+    dados: FormDataEditarPerfil,
+  ): Promise<LoginApiResponse> => {
+    try {
+      const dataForm = new FormData();
+      dataForm.append("name", dados.name);
+      dataForm.append("email", dados.email);
+
+      if (dados.img) {
+        dataForm.append("img", dados.img);
+      }
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/person/`, {
+        method: "PATCH",
+        credentials: "include",
+        body: dataForm,
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const data = await res.json();
+
+      if (data.isValid) {
+        toast.success("Perfil atualizado com sucesso!");
+      }
+
+      return data;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Erro ao editar perfil";
+      toast.error(message);
+      return { isValid: false, message };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, cadastrar, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, cadastrar, editarPerfil, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

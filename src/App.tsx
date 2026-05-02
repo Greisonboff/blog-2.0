@@ -10,6 +10,7 @@ import CriarPost from "@/pages/CriarPost";
 import MeusPosts from "@/pages/MeusPosts";
 import Login from "@/pages/Login";
 import NotFound from "./pages/NotFound";
+import Perfil from "./pages/Perfil";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
               <Route path="/criar-post" element={<CriarPost />} />
               <Route path="/meus-posts" element={<MeusPosts />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/perfil" element={<Perfil />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
