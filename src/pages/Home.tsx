@@ -3,6 +3,7 @@ import PostCard from "@/components/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { Loading } from "@/components/ui/loadin";
+import { Pagination } from "@/components/Pagination";
 
 const Home = () => {
   const { posts } = useBlog();
@@ -29,6 +30,7 @@ const Home = () => {
   return (
     <main className="blog-container">
       {isFetching && <Loading />}
+
       <h1 className="mb-8 font-heading text-3xl font-bold text-foreground sm:text-4xl">
         Últimas publicações
       </h1>
@@ -42,6 +44,10 @@ const Home = () => {
           {data?.posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
+          <Pagination
+            currentPage={Number(page)}
+            totalPages={data?.totalPages || 1}
+          />
         </div>
       )}
     </main>
