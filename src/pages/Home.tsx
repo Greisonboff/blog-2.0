@@ -44,6 +44,7 @@ const Home = () => {
           {data?.posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
+
           <Pagination
             currentPage={Number(page)}
             totalPages={data?.totalPages || 1}
