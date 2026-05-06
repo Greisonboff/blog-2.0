@@ -6,9 +6,13 @@ const Perfil = () => {
   const { user, editarPerfil } = useAuth();
   console.log("Dados do usuário:", user);
 
+  const defaultAvatar =
+    "https://res.cloudinary.com/dtfpzkwpz/image/upload/v1778033342/296fe121-5dfa-43f4-98b5-db50019738a7_cjpic2.jpg";
   const [nome, setNome] = useState(user?.name || "");
   const [cadEmail, setCadEmail] = useState(user?.email || "");
-  const [avatarUrl, setAvatarUrl] = useState(user?.img.url || "");
+  const [avatarUrl, setAvatarUrl] = useState(user?.img?.url || defaultAvatar);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const isDefaultAvatar = avatarUrl === defaultAvatar;
 
   const inputClass =
     "w-full rounded-md border bg-background px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring";
@@ -20,12 +24,17 @@ const Perfil = () => {
       name: nome,
       email: cadEmail,
       img: avatarUrl,
+      avatarFile: avatarFile ? avatarFile : "Nenhum arquivo selecionado",
     });
 
     const res = editarPerfil({
       name: nome,
       email: cadEmail,
-      img: avatarUrl,
+      img: avatarFile
+        ? avatarFile
+        : avatarUrl === defaultAvatar
+          ? "delete"
+          : avatarUrl, // Envia o arquivo se selecionado, caso contrário, envia a URL
     });
     res.then((res) => {
       if (res.isValid) {
@@ -42,6 +51,44 @@ const Perfil = () => {
       </h1>
 
       <form onSubmit={handleCadastro} className="space-y-4">
+        <div className="flex flex-col items-center">
+          <img
+            src={avatarFile ? URL.createObjectURL(avatarFile!) : avatarUrl}
+            alt="Avatar do usuário"
+            className="mb-2 h-32 w-32 rounded-full object-cover"
+          />
+
+          <input
+            id="avatar"
+            className="hidden"
+            type="file"
+            accept="image/*"
+            onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+          />
+          <div className="flex gap-3 mt-2">
+            <label
+              htmlFor="avatar"
+              className="mb-1 block cursor-pointer text-sm font-medium rounded-md bg-primary px-3 py-2.5 text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              {avatarFile || !isDefaultAvatar
+                ? "Alterar avatar"
+                : "Adicionar avatar"}
+            </label>
+            {avatarFile || !isDefaultAvatar ? (
+              <button
+                type="button"
+                className="mb-1 block cursor-pointer text-sm font-medium rounded-md bg-primary px-3 py-2.5 text-primary-foreground transition-colors hover:bg-primary/90"
+                onClick={() => {
+                  setAvatarUrl(defaultAvatar);
+                  setAvatarFile(null);
+                }}
+              >
+                Remover avatar
+              </button>
+            ) : null}
+          </div>
+        </div>
+
         <div>
           <label className="mb-1 block text-sm font-medium text-foreground">
             Nome completo
@@ -66,22 +113,11 @@ const Perfil = () => {
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-foreground">
-            URL do avatar (opcional)
-          </label>
-          <input
-            value={avatarUrl}
-            onChange={(e) => setAvatarUrl(e.target.value)}
-            className={inputClass}
-            placeholder="https://exemplo.com/avatar.jpg"
-          />
-        </div>
         <button
           type="submit"
           className="w-full rounded-md bg-primary py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
-          Criar conta
+          Salvar alterações
         </button>
       </form>
     </main>

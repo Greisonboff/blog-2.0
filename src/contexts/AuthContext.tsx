@@ -174,6 +174,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (data.isValid) {
         toast.success("Perfil atualizado com sucesso!");
+
+        checkAuthStatus();
       }
 
       return data;

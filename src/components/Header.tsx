@@ -56,12 +56,12 @@ const Header = () => {
           {user ? (
             <div className="ml-3 flex items-center gap-3">
               <Link to="/perfil">
-                <div className="flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
+                <div className="flex items-center ">
                   {user.img ? (
                     <img
                       src={user.img.url}
                       alt={user.name}
-                      className="h-6 w-6 rounded-full object-cover"
+                      className="h-8 w-8 rounded-full object-cover"
                     />
                   ) : (
                     <User className="h-4 w-4 text-muted-foreground" />
