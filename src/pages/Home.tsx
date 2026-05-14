@@ -6,9 +6,7 @@ import { Loading } from "@/components/ui/loadin";
 import { Pagination } from "@/components/Pagination";
 
 const Home = () => {
-  const { posts } = useBlog();
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const page = (searchParams.get("page") as string) || "1";
 

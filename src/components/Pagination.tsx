@@ -9,7 +9,7 @@ export function Pagination({ currentPage, totalPages }: Props) {
   const navigate = useNavigate();
 
   function onPageChange(page: number) {
-    navigate(`/?page=${page}`);
+    navigate(`?page=${page}`);
 
     scrollTo({ behavior: "smooth", top: 0 });
   }

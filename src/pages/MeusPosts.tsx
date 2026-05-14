@@ -7,6 +7,7 @@ import { Pencil, Trash2, Heart, X } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loadin";
+import { Pagination } from "@/components/Pagination";
 
 const MeusPosts = () => {
   const { user } = useAuth();
@@ -172,7 +173,7 @@ const MeusPosts = () => {
                       <Pencil className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => excluirPost(post._id)}
+                      onClick={() => setDeleteId(post._id)}
                       className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -182,6 +183,11 @@ const MeusPosts = () => {
               )}
             </div>
           ))}
+
+          <Pagination
+            currentPage={Number(page)}
+            totalPages={data?.totalPages || 1}
+          />
         </div>
       )}
 
