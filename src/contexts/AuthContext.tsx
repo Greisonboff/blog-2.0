@@ -121,10 +121,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return data;
     } catch (error) {
-      console.error("Erro no cadastro:", error);
-      const message =
-        error instanceof Error ? error.message : "Erro ao cadastrar";
-      toast.error(message);
+      const message = "Erro ao cadastrar";
+      toast.error("Erro ao cadastrar");
       return { isValid: false, message };
     }
   };

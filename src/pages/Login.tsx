@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { AvatarFile } from "@/components/AvatarFile";
 
 const Login = () => {
   const { login, cadastrar, user } = useAuth();
@@ -18,7 +19,7 @@ const Login = () => {
   const [cadEmail, setCadEmail] = useState("");
   const [cadSenha, setCadSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   if (user) {
     navigate("/");
@@ -59,7 +60,7 @@ const Login = () => {
       email: cadEmail,
       password: cadSenha,
       confirmPassword: confirmarSenha,
-      img: avatarUrl.trim() || "",
+      img: avatarFile || "",
     });
 
     if (!res?.isValid) {
@@ -135,6 +136,7 @@ const Login = () => {
           </form>
         ) : (
           <form onSubmit={handleCadastro} className="space-y-4">
+            <AvatarFile avatarFile={avatarFile} setAvatarFile={setAvatarFile} />
             <div>
               <label className="mb-1 block text-sm font-medium text-foreground">
                 Nome completo *
@@ -180,17 +182,6 @@ const Login = () => {
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 className={inputClass}
                 placeholder="••••••"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-foreground">
-                URL do avatar (opcional)
-              </label>
-              <input
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                className={inputClass}
-                placeholder="https://exemplo.com/avatar.jpg"
               />
             </div>
             <button

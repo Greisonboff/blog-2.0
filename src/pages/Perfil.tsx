@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { defaultAvatar } from "@/lib/utils";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -7,9 +8,6 @@ const Perfil = () => {
   const { user, editarPerfil } = useAuth();
 
   const navigate = useNavigate();
-
-  const defaultAvatar =
-    "https://res.cloudinary.com/dtfpzkwpz/image/upload/v1778033342/296fe121-5dfa-43f4-98b5-db50019738a7_cjpic2.jpg";
   const [nome, setNome] = useState(user?.name || "");
   const [cadEmail, setCadEmail] = useState(user?.email || "");
   const [avatarUrl, setAvatarUrl] = useState(user?.img?.url || defaultAvatar);
