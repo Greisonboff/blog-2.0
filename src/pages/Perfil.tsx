@@ -1,10 +1,12 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Perfil = () => {
   const { user, editarPerfil } = useAuth();
-  console.log("Dados do usuário:", user);
+
+  const navigate = useNavigate();
 
   const defaultAvatar =
     "https://res.cloudinary.com/dtfpzkwpz/image/upload/v1778033342/296fe121-5dfa-43f4-98b5-db50019738a7_cjpic2.jpg";
@@ -20,13 +22,6 @@ const Perfil = () => {
   function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
 
-    console.log("Dados do usuário:", {
-      name: nome,
-      email: cadEmail,
-      img: avatarUrl,
-      avatarFile: avatarFile ? avatarFile : "Nenhum arquivo selecionado",
-    });
-
     const res = editarPerfil({
       name: nome,
       email: cadEmail,
@@ -39,11 +34,13 @@ const Perfil = () => {
     res.then((res) => {
       if (res.isValid) {
         toast.success("Perfil atualizado com sucesso!");
+        navigate("/");
       } else {
         toast.error(res.message || "Erro ao atualizar perfil");
       }
     });
   }
+
   return (
     <main className="blog-container max-w-2xl">
       <h1 className="mb-6 font-heading text-2xl font-bold text-foreground sm:text-3xl">

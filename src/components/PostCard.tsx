@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { DeleteModal } from "./DeleteModal";
 
 const PostCard = ({ post }: { post: Post }) => {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ const PostCard = ({ post }: { post: Post }) => {
   const [showComments, setShowComments] = useState(false);
   const [novoComentario, setNovoComentario] = useState("");
   const [editingComment, setEditingComment] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const isLiked = user ? post.likesData.hasLiked : false;
   const previewText =
@@ -61,14 +63,18 @@ const PostCard = ({ post }: { post: Post }) => {
     }
   };
 
-  const handleDeleteComment = async (commentId: string) => {
-    const res = await deleteComment(post._id, commentId);
+  const handleDeleteComment = async () => {
+    if (!deleteId) return;
+
+    const res = await deleteComment(post._id, deleteId);
 
     if (res.isValid) {
       toast.success("Comentário excluido!");
     } else {
       toast.error("Erro ao excluir comentário");
     }
+
+    setDeleteId(null);
   };
 
   const handleEditComment = async (commentId: string) => {
@@ -187,7 +193,7 @@ const PostCard = ({ post }: { post: Post }) => {
                             <Pencil className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => handleDeleteComment(c._id)}
+                            onClick={() => setDeleteId(c._id)}
                             className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -228,6 +234,13 @@ const PostCard = ({ post }: { post: Post }) => {
           </div>
         )}
       </div>
+      {deleteId && (
+        <DeleteModal
+          cancelDelete={() => setDeleteId(null)}
+          confirmDelete={handleDeleteComment}
+          title="Excluir comentário"
+        />
+      )}
     </article>
   );
 };
