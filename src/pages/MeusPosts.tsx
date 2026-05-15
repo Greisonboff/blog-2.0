@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loadin";
 import { Pagination } from "@/components/Pagination";
 import { DeleteModal } from "@/components/DeleteModal";
+import Image from "@/components/Image";
 
 const MeusPosts = () => {
   const { user } = useAuth();
@@ -154,7 +155,7 @@ const MeusPosts = () => {
               ) : (
                 <>
                   <div>
-                    <img
+                    <Image
                       src={post.images}
                       alt={post.title}
                       className="h-52 w-full object-cover sm:h-64 rounded-md mb-2"

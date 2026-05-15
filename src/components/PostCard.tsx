@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteModal } from "./DeleteModal";
+import Image from "./Image";
 
 const PostCard = ({ post }: { post: Post }) => {
   const { user } = useAuth();
@@ -91,7 +92,7 @@ const PostCard = ({ post }: { post: Post }) => {
   return (
     <article className="animate-fade-in overflow-hidden rounded-lg border bg-card shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-card-hover)]">
       {post.images && post.images.length > 0 && (
-        <img
+        <Image
           src={post.images}
           alt={post.title}
           className="h-52 w-full object-cover sm:h-64"
