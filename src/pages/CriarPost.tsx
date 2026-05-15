@@ -10,7 +10,7 @@ const CriarPost = () => {
   const navigate = useNavigate();
   const [titulo, setTitulo] = useState("");
   const [conteudo, setConteudo] = useState("");
-  const [imagemUrl, setImagemUrl] = useState("");
+  const [imagemUrl, setImagemUrl] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!user) {
@@ -34,6 +34,9 @@ const CriarPost = () => {
     const res = await criarPost({
       title: titulo,
       content: conteudo,
+      images: Array.isArray(imagemUrl)
+        ? (imagemUrl as unknown as FileList)
+        : ([imagemUrl] as unknown as FileList),
     });
 
     if (!res?.isValid) {
@@ -51,6 +54,48 @@ const CriarPost = () => {
         Criar novo post
       </h1>
       <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-foreground">
+            URL da imagem (opcional)
+          </label>
+          <div className="flex flex-col items-center pt-4">
+            {imagemUrl && (
+              <img
+                src={URL.createObjectURL(imagemUrl!)}
+                alt="Avatar do usuário"
+                className="mb-2  w-[200px]  object-cover"
+              />
+            )}
+
+            <input
+              id="imagem"
+              className="hidden"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImagemUrl(e.target.files?.[0] || null)}
+            />
+
+            <div className="flex gap-3 mt-2">
+              <label
+                htmlFor="imagem"
+                className="mb-1 block cursor-pointer text-sm font-medium rounded-md bg-primary px-3 py-2.5 text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                {imagemUrl ? "Alterar imagem" : "Adicionar imagem"}
+              </label>
+              {imagemUrl ? (
+                <button
+                  type="button"
+                  className="mb-1 block cursor-pointer text-sm font-medium rounded-md bg-primary px-3 py-2.5 text-primary-foreground transition-colors hover:bg-primary/90"
+                  onClick={() => {
+                    setImagemUrl(null);
+                  }}
+                >
+                  Remover imagem
+                </button>
+              ) : null}
+            </div>
+          </div>
+        </div>
         <div>
           <label className="mb-1.5 block text-sm font-medium text-foreground">
             Título *
@@ -80,17 +125,7 @@ const CriarPost = () => {
             <p className="mt-1 text-sm text-destructive">{errors.conteudo}</p>
           )}
         </div>
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-foreground">
-            URL da imagem (opcional)
-          </label>
-          <input
-            value={imagemUrl}
-            onChange={(e) => setImagemUrl(e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-            placeholder="https://exemplo.com/imagem.jpg"
-          />
-        </div>
+
         <div className="flex gap-3">
           <button
             type="submit"
