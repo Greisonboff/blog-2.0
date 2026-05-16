@@ -1,7 +1,6 @@
 # 📝 Blog 2.0
 
 ![Status do Projeto](https://img.shields.io/badge/status-em%20desenvolvimento-green?style=for-the-badge)
-![Licença](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
