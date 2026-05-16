@@ -1,73 +1,78 @@
-# Welcome to your Lovable project
+# 📝 Blog 2.0
 
-## Project info
+![Status do Projeto](https://img.shields.io/badge/status-em%20desenvolvimento-green?style=for-the-badge)
+![Licença](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Uma plataforma de blog moderna e robusta, desenvolvida com foco em performance e experiência do usuário (UX). O Blog 2.0 permite que usuários criem contas, gerenciem seus perfis e publiquem conteúdos de forma dinâmica, oferecendo uma interface limpa e intuitiva para leitura e interação.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 💡 Funcionalidades Principais
 
-**Use Lovable**
+- 🔐 **Autenticação Completa:** Sistema de login e cadastro seguro, com suporte a persistência de sessão ("Lembrar de mim").
+- ✍️ **Gestão de Conteúdo (CRUD):** Criação, edição e exclusão de publicações com suporte a upload de imagens.
+- 👤 **Perfil Customizável:** Edição de dados do usuário e alteração dinâmica de avatar.
+- 💬 **Interatividade:** Sistema integrado de comentários e curtidas para engajamento da comunidade.
+- 📑 **Navegação Otimizada:** Paginação inteligente no servidor para carregamento rápido de grandes volumes de posts.
+- 🚀 **Feedback Visual:** Estados de carregamento (Skeleton/Loaders) e notificações em tempo real via Toasts.
+- 📱 **Design Responsivo:** Interface adaptável construída com Tailwind CSS para uma experiência perfeita em mobile, tablet e desktop.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Tecnologias e Ferramentas
 
-**Use your preferred IDE**
+| Categoria            | Tecnologia                                          | Descrição                                               |
+| :------------------- | :-------------------------------------------------- | :------------------------------------------------------ |
+| **Frontend**         | [React](https://reactjs.org/)                       | Biblioteca principal para interface.                    |
+| **Linguagem**        | [TypeScript](https://www.typescriptlang.org/)       | Tipagem estática para maior segurança e escalabilidade. |
+| **Build Tool**       | [Vite](https://vitejs.dev/)                         | Bundler ultrarrápido para desenvolvimento moderno.      |
+| **Estilização**      | [Tailwind CSS](https://tailwindcss.com/)            | Framework utilitário para design responsivo.            |
+| **Componentes**      | [shadcn/ui](https://ui.shadcn.com/)                 | Componentes de interface acessíveis e reutilizáveis.    |
+| **State Management** | [TanStack Query](https://tanstack.com/query/latest) | Gerenciamento de estado assíncrono e cache de dados.    |
+| **Roteamento**       | [React Router](https://reactrouter.com/)            | Navegação dinâmica entre páginas.                       |
+| **Ícones**           | [Lucide React](https://lucide.dev/)                 | Biblioteca de ícones vetoriais leves.                   |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🚀 Como Executar o Projeto
 
-Follow these steps:
+### 📋 Pré-requisitos
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Antes de começar, você precisará ter instalado em sua máquina:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- [Node.js](https://nodejs.org/) (Versão 18 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 🔧 Instalação
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+1.  **Clone o repositório:**
+
+    ```bash
+    git clone <https://github.com/seu-usuario/blog-2.0.git>
+    cd blog-2.0
+    ```
+
+2.  **Instale as dependências:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configuração de Variáveis de Ambiente:**
+    Crie um arquivo `.env` na raiz do projeto com base no exemplo abaixo:
+    ```env
+    # URL base da API do backend
+    VITE_API_URL=<https://sua-api-blog.com/api>
+    ```
+
+### 🏃 Iniciando a Aplicação
+
+Para rodar o projeto em ambiente de desenvolvimento:
+
+```bash
 npm run dev
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

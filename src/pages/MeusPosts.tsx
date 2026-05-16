@@ -120,6 +120,11 @@ const MeusPosts = () => {
             >
               {editingId === post._id ? (
                 <div className="space-y-3">
+                  <Image
+                    src={post.images}
+                    alt={post.title}
+                    className="h-52 w-full object-cover sm:h-64 rounded-md mb-2"
+                  />
                   <input
                     value={editTitulo}
                     onChange={(e) => setEditTitulo(e.target.value)}
@@ -131,12 +136,7 @@ const MeusPosts = () => {
                     rows={5}
                     className="w-full rounded-md border bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
-                  <input
-                    value={editImagem}
-                    onChange={(e) => setEditImagem(e.target.value)}
-                    placeholder="URL da imagem (opcional)"
-                    className="w-full rounded-md border bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
+
                   <div className="flex gap-2">
                     <button
                       onClick={saveEdit}
