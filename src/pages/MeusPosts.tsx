@@ -92,6 +92,9 @@ const MeusPosts = () => {
     }
   };
 
+  const totalLikes =
+    data?.posts?.reduce((acc, post) => acc + post.likesData.likesTotal, 0) || 0;
+
   return (
     <main className="blog-container max-w-2xl">
       {isFetching && <Loading />}
@@ -99,13 +102,13 @@ const MeusPosts = () => {
         Meus Posts
       </h1>
       <div className="mb-6 flex gap-4 text-sm text-muted-foreground">
-        {/*  <span>
-          {meusPosts.length} post{meusPosts.length !== 1 ? "s" : ""}
+        <span>
+          {data?.posts?.length} post{data?.posts?.length !== 1 ? "s" : ""}
         </span>
-         <span className="flex items-center gap-1">
+        <span className="flex items-center gap-1">
           <Heart className="h-3.5 w-3.5" /> {totalLikes} curtida
           {totalLikes !== 1 ? "s" : ""}
-        </span> */}
+        </span>
       </div>
 
       {data?.posts?.length === 0 ? (
