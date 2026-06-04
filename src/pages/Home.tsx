@@ -26,7 +26,7 @@ const Home = () => {
   });
 
   return (
-    <main className="blog-container">
+    <main className="blog-container min-h-[85vh]">
       {isFetching && <Loading />}
 
       <h1 className="mb-8 font-heading text-3xl font-bold text-foreground sm:text-4xl">

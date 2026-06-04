@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
-      <div className="blog-container flex items-center justify-between py-4">
+      <div className="blog-container flex items-center justify-between py-4 ">
         <Link
           to="/"
           className="flex items-center gap-2 font-heading text-xl font-bold text-foreground"
@@ -97,7 +97,7 @@ const Header = () => {
 
       {/* Mobile nav */}
       {menuOpen && (
-        <nav className="animate-fade-in border-t bg-card px-4 pb-4 md:hidden">
+        <nav className="animate-fade-in border-t bg-card px-4 pb-4 md:hidden pt-2">
           {navItems.map((item) => (
             <Link
               key={item.to}
@@ -113,15 +113,28 @@ const Header = () => {
             </Link>
           ))}
           {user ? (
-            <button
-              onClick={() => {
-                handleLogout();
-                setMenuOpen(false);
-              }}
-              className="mt-2 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
-            >
-              <LogOut className="h-4 w-4" /> Sair
-            </button>
+            <>
+              <Link
+                to="/perfil"
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center gap-2  rounded-md px-3 py-2 text-sm font-medium  ${
+                  isActive("/perfil")
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                <User className="h-4 w-4" /> Perfil
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+                className="mt-2 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
+              >
+                <LogOut className="h-4 w-4" /> Sair
+              </button>
+            </>
           ) : (
             <Link
               to="/login"

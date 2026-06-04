@@ -77,8 +77,8 @@ const Login = () => {
     "w-full rounded-md border bg-background px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring";
 
   return (
-    <main className="blog-container flex justify-center">
-      <div className="w-full max-w-md animate-fade-in rounded-lg border bg-card p-6 shadow-[var(--shadow-card)]">
+    <main className="blog-container flex justify-center min-h-[85vh]">
+      <div className="w-full max-w-md animate-fade-in rounded-lg border bg-card p-6 shadow-[var(--shadow-card)] max-h-fit">
         <div className="mb-6 flex border-b">
           <button onClick={() => setTab("login")} className={tabClass("login")}>
             Login

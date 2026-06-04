@@ -11,6 +11,7 @@ import MeusPosts from "@/pages/MeusPosts";
 import Login from "@/pages/Login";
 import NotFound from "./pages/NotFound";
 import Perfil from "./pages/Perfil";
+import { Footer } from "./components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/perfil" element={<Perfil />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Footer />
           </BrowserRouter>
         </BlogProvider>
       </AuthProvider>

@@ -40,7 +40,7 @@ const Perfil = () => {
   }
 
   return (
-    <main className="blog-container max-w-2xl">
+    <main className="blog-container max-w-2xl min-h-[85vh]">
       <h1 className="mb-6 font-heading text-2xl font-bold text-foreground sm:text-3xl">
         Perfil do Usuário
       </h1>

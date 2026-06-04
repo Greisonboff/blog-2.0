@@ -66,7 +66,7 @@ const MeusPosts = () => {
     data?.posts?.reduce((acc, post) => acc + post.likesData.likesTotal, 0) || 0;
 
   return (
-    <main className="blog-container max-w-2xl">
+    <main className="blog-container max-w-2xl min-h-[85vh]">
       {isFetching && <Loading />}
       <h1 className="mb-2 font-heading text-2xl font-bold text-foreground sm:text-3xl">
         Meus Posts
