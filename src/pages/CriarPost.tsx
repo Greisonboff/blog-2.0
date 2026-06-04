@@ -29,7 +29,6 @@ const CriarPost = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     if (!validate()) return;
 
     const res = await criarPost({

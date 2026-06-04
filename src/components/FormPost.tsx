@@ -3,11 +3,12 @@ interface FormPostProps {
   setTitulo: React.Dispatch<React.SetStateAction<string>>;
   conteudo: string;
   setConteudo: React.Dispatch<React.SetStateAction<string>>;
-  imagemUrl: File | null;
-  setImagemUrl: React.Dispatch<React.SetStateAction<File | null>>;
+  imagemUrl: File | string | null;
+  setImagemUrl: React.Dispatch<React.SetStateAction<File | string | null>>;
   handleSubmit: React.FormEventHandler<HTMLFormElement>;
   errors: Record<string, string>;
   handleCancel?: () => void;
+  submitText?: string;
 }
 function FormPost({
   titulo,
@@ -19,9 +20,16 @@ function FormPost({
   handleSubmit,
   errors,
   handleCancel,
+  submitText = "Publicar",
 }: FormPostProps) {
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(e);
+      }}
+      className="space-y-5"
+    >
       <div>
         <label className="mb-1.5 block text-sm font-medium text-foreground">
           URL da imagem (opcional)
@@ -29,9 +37,13 @@ function FormPost({
         <div className="flex flex-col items-center pt-4">
           {imagemUrl && (
             <img
-              src={URL.createObjectURL(imagemUrl!)}
+              src={
+                typeof imagemUrl === "string"
+                  ? imagemUrl
+                  : URL.createObjectURL(imagemUrl!)
+              }
               alt="Avatar do usuário"
-              className="mb-2  w-[200px]  object-cover"
+              className="mb-2  w-[200px] object-cover max-h-[200px]"
             />
           )}
 
@@ -94,12 +106,12 @@ function FormPost({
         )}
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 justify-center items-center">
         <button
           type="submit"
           className="rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
-          Publicar
+          {submitText}
         </button>
         <button
           type="button"

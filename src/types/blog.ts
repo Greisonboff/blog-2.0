@@ -16,13 +16,14 @@ export interface Comentario {
 }
 
 export interface Post {
-  id: string;
-  titulo: string;
-  conteudo: string;
+  _id: string;
+  title: string;
+  content: string;
   autorId: string;
   autorNome: string;
   dataCriacao: string;
   imagemUrl?: string;
   likes: string[]; // array of user IDs who liked
   comentarios: Comentario[];
+  images?: [string];
 }
