@@ -48,7 +48,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const data = await res.json();
       setUser(data.isLoggedIn ? data.user : null);
     } catch (error) {
-      console.error("Erro ao verificar status:", error);
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -75,18 +74,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const data = await res.json();
 
-      if (data.isValid) {
+      if (data.success) {
         setUser(data.user);
-        toast.success("Login realizado com sucesso!");
+        toast.success(data.message);
       }
 
       return data;
     } catch (error) {
-      console.error("Erro no login:", error);
       const message =
-        error instanceof Error ? error.message : "Erro ao fazer login";
-      toast.error(message);
-      return { isValid: false, message };
+        error instanceof Error ? error.message : "erro ao fazer login";
+      toast.error("erro ao fazer login");
+      return { success: false, message };
     }
   };
 
@@ -114,16 +112,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const data = await res.json();
 
-      if (data.isValid) {
+      if (data.success) {
         setUser(data.user);
-        toast.success("Cadastro realizado com sucesso!");
+        toast.success(data.message);
       }
 
       return data;
     } catch (error) {
-      const message = "Erro ao cadastrar";
-      toast.error("Erro ao cadastrar");
-      return { isValid: false, message };
+      const message = "erro ao cadastrar";
+      toast.error(message);
+      return { success: false, message };
     }
   };
 
@@ -138,13 +136,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const data = await res.json();
 
-      if (data.isValid) {
+      if (data.success) {
         setUser(null);
-        toast.success("Logout realizado com sucesso!");
+        toast.success(data.message);
       }
     } catch (error) {
-      console.error("Erro no logout:", error);
-      toast.error("Erro ao fazer logout");
+      toast.error("erro ao fazer logout");
     }
   };
 
@@ -170,8 +167,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const data = await res.json();
 
-      if (data.isValid) {
-        toast.success("Perfil atualizado com sucesso!");
+      if (data.success) {
+        toast.success(data.message);
 
         checkAuthStatus();
       }
@@ -179,9 +176,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return data;
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Erro ao editar perfil";
-      toast.error(message);
-      return { isValid: false, message };
+        error instanceof Error ? error.message : "erro ao editar perfil";
+      return { success: false, message };
     }
   };
 

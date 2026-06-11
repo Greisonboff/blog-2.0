@@ -48,13 +48,10 @@ function EditPostModal({ post, onClose }: EditPostModalProps) {
       !imagemUrl,
     );
 
-    if (!res?.isValid) {
-      toast.error(res?.message || "Erro ao editar post");
-      return;
+    toast.error(res?.message || "Erro ao editar post");
+    if (res?.success) {
+      onClose();
     }
-
-    onClose();
-    toast.success("Post atualizado!");
   };
 
   return (

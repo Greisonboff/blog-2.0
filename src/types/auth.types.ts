@@ -16,14 +16,14 @@ export interface UserData {
 
 // 🎯 **INTERFACE PRINCIPAL - Resposta de Login**
 export interface LoginResponse {
-  isValid: boolean;
+  success: boolean;
   message: string;
   user: UserData;
 }
 
 // Interface para erro de login
 export interface LoginErrorResponse {
-  isValid: false;
+  success: false;
   message: string;
   user?: never; // Não deve ter user em caso de erro
 }
@@ -31,4 +31,4 @@ export interface LoginErrorResponse {
 // Interface unificada (pode ser sucesso ou erro)
 export type LoginApiResponse = LoginResponse | LoginErrorResponse;
 
-export type DefaultResponse = { isValid: boolean; message: string };
+export type DefaultResponse = { success: boolean; message: string };

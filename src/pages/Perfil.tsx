@@ -30,11 +30,8 @@ const Perfil = () => {
           : avatarUrl, // Envia o arquivo se selecionado, caso contrário, envia a URL
     });
     res.then((res) => {
-      if (res.isValid) {
-        toast.success("Perfil atualizado com sucesso!");
+      if (res.success) {
         navigate("/");
-      } else {
-        toast.error(res.message || "Erro ao atualizar perfil");
       }
     });
   }

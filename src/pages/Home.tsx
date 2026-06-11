@@ -1,4 +1,3 @@
-import { useBlog } from "@/contexts/BlogContext";
 import PostCard from "@/components/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -33,7 +32,7 @@ const Home = () => {
         Últimas publicações
       </h1>
 
-      {data?.posts.length === 0 ? (
+      {data?.posts?.length === 0 ? (
         <p className="text-center text-muted-foreground">
           Nenhum post publicado ainda.
         </p>

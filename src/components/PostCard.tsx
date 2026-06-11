@@ -35,7 +35,7 @@ const PostCard = ({ post }: { post: Post }) => {
 
   const handleLike = () => {
     if (!user) {
-      toast.error("Faça login para curtir");
+      toast.error("faça login para curtir");
       return;
     }
     toggleLike(post.likesData.hasLiked ? "unlike" : "like", post._id);
@@ -43,37 +43,24 @@ const PostCard = ({ post }: { post: Post }) => {
 
   const handleComment = async () => {
     if (!user) {
-      toast.error("Faça login para comentar");
+      toast.error("faça login para comentar");
       return;
     }
     if (!novoComentario.trim()) return;
 
-    try {
-      const res = await Promise.resolve(
-        adicionarComentario(post._id, novoComentario.trim()),
-      );
+    const res = await Promise.resolve(
+      adicionarComentario(post._id, novoComentario.trim()),
+    );
 
-      if (res?.isValid) {
-        setNovoComentario("");
-        toast.success("Comentário adicionado!");
-      } else {
-        toast.error("Erro ao adicionar comentário");
-      }
-    } catch (error) {
-      // Handle the error here
+    if (res.success) {
+      setNovoComentario("");
     }
   };
 
   const handleDeleteComment = async () => {
     if (!deleteId) return;
 
-    const res = await deleteComment(post._id, deleteId);
-
-    if (res.isValid) {
-      toast.success("Comentário excluido!");
-    } else {
-      toast.error("Erro ao excluir comentário");
-    }
+    await deleteComment(post._id, deleteId);
 
     setDeleteId(null);
   };
@@ -81,11 +68,8 @@ const PostCard = ({ post }: { post: Post }) => {
   const handleEditComment = async (commentId: string) => {
     const res = await editComment(post._id, commentId, editingComment.trim());
 
-    if (res.isValid) {
+    if (res.success) {
       setEditingComment(null);
-      toast.success("Comentário editado!");
-    } else {
-      toast.error("Erro ao editar comentário");
     }
   };
 

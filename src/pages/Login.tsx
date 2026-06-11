@@ -29,15 +29,13 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginEmail || !loginSenha) {
-      toast.error("Preencha todos os campos");
+      toast.error("preencha todos os campos");
       return;
     }
     const res = await login(loginEmail, loginSenha, lembrar);
-    if (!res?.isValid) {
-      toast.error(res?.message);
-      return;
+    if (res.success) {
+      navigate("/");
     }
-    navigate("/");
   };
 
   const handleCadastro = async (e: React.FormEvent) => {
@@ -62,12 +60,9 @@ const Login = () => {
       img: avatarFile || "",
     });
 
-    if (!res?.isValid) {
-      toast.error(res?.message);
-      return;
+    if (res.success) {
+      navigate("/");
     }
-    toast.success("Conta criada com sucesso!");
-    navigate("/");
   };
 
   const tabClass = (t: string) =>

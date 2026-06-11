@@ -39,13 +39,9 @@ const CriarPost = () => {
         : ([imagemUrl] as unknown as FileList),
     });
 
-    if (!res?.isValid) {
-      toast.error(res?.message || "Erro ao criar post");
-      return;
+    if (res.success) {
+      navigate("/");
     }
-
-    toast.success("Post publicado com sucesso!");
-    navigate("/");
   };
 
   return (

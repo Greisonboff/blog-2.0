@@ -63,9 +63,15 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const data = await res.json();
 
+      if (data.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+
       return data;
     } catch (error) {
-      return { isValid: false, message: "Erro ao criar post" };
+      return { success: false, message: "erro ao criar post" };
     }
   };
 
@@ -75,7 +81,7 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
     removeImage: boolean,
   ) => {
     try {
-      if (!postId) throw new Error("Post não encontrado");
+      if (!postId) throw new Error("post não encontrado");
 
       const data = new FormData();
       data.append("title", formData.title);
@@ -99,12 +105,14 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const dataResponse = await res.json();
 
-      if (dataResponse.isValid) {
+      if (dataResponse.success) {
         queryClient.invalidateQueries({ queryKey: ["posts my posts"] });
+      } else {
+        toast.error(dataResponse.message);
       }
       return dataResponse;
     } catch (error) {
-      return { isValid: false, message: "Erro ao editar post" };
+      return { success: false, message: "erro ao editar post" };
     }
   };
 
@@ -116,15 +124,19 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       const dataResponse = await res.json();
-      if (dataResponse.isValid) {
+
+      if (dataResponse.success) {
         queryClient.invalidateQueries({ queryKey: ["posts my posts"] });
-        toast.success("Post excluido com sucesso!");
+        toast.success(dataResponse.message);
+      } else {
+        toast.error(dataResponse.message);
       }
 
       return dataResponse;
     } catch (error) {
-      toast.error("Erro ao excluir post");
-      return { isValid: false, message: "Erro ao excluir post" };
+      const message = "erro ao excluir post";
+      toast.error(message);
+      return { success: false, message };
     }
   };
 
@@ -143,7 +155,7 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const dataResponse = await res.json();
 
-    if (dataResponse.isValid) {
+    if (dataResponse.success) {
       queryClient.invalidateQueries({ queryKey: ["postsreq"] });
     }
 
@@ -168,8 +180,11 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
         return res.json();
       })
       .then((data) => {
-        if (data.isValid) {
+        if (data.success) {
           queryClient.invalidateQueries({ queryKey: ["postsreq"] });
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
 
         return data;
@@ -190,8 +205,11 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const dataResponse = await res.json();
 
-    if (dataResponse.isValid) {
+    if (dataResponse.success) {
       queryClient.invalidateQueries({ queryKey: ["postsreq"] });
+      toast.success(dataResponse.message);
+    } else {
+      toast.error(dataResponse.message);
     }
 
     return dataResponse;
@@ -219,8 +237,11 @@ export const BlogProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const dataResponse = await res.json();
 
-    if (dataResponse.isValid) {
+    if (dataResponse.success) {
       queryClient.invalidateQueries({ queryKey: ["postsreq"] });
+      toast.success(dataResponse.message);
+    } else {
+      toast.error(dataResponse.message);
     }
 
     return dataResponse;

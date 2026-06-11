@@ -54,11 +54,10 @@ const MeusPosts = () => {
     if (deleteId) {
       const res = await excluirPost(deleteId);
 
-      if (!res?.isValid) {
+      if (!res?.success) {
         return;
       }
       setDeleteId(null);
-      toast.success("Post excluído!");
     }
   };
 
