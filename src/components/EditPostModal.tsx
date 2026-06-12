@@ -15,8 +15,6 @@ function EditPostModal({ post, onClose }: EditPostModalProps) {
 
   const { editarPost } = useBlog();
 
-  console.log(post);
-
   const [titulo, setTitulo] = useState(post.title);
   const [conteudo, setConteudo] = useState(post.content);
   const [imagemUrl, setImagemUrl] = useState<File | string | null>(

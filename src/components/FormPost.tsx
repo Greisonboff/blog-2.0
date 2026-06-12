@@ -31,9 +31,6 @@ function FormPost({
       className="space-y-5"
     >
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-foreground">
-          URL da imagem (opcional)
-        </label>
         <div className="flex flex-col items-center pt-4">
           {imagemUrl && (
             <img
