@@ -20,7 +20,7 @@ function EditPostModal({ post, onClose }: EditPostModalProps) {
   const [titulo, setTitulo] = useState(post.title);
   const [conteudo, setConteudo] = useState(post.content);
   const [imagemUrl, setImagemUrl] = useState<File | string | null>(
-    post.images[0] || null,
+    post?.images?.[0] || null,
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
 
