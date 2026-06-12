@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { AvatarFile } from "@/components/AvatarFile";
+import { ButtonLoad } from "@/components/ButtonLoad";
 
 const Login = () => {
   const { login, cadastrar, user } = useAuth();
@@ -21,6 +22,8 @@ const Login = () => {
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
+  const [loading, setLoading] = useState(false);
+
   if (user) {
     navigate("/");
     return null;
@@ -28,30 +31,36 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!loginEmail || !loginSenha) {
       toast.error("preencha todos os campos");
       return;
     }
+    setLoading(true);
+
     const res = await login(loginEmail, loginSenha, lembrar);
     if (res.success) {
       navigate("/");
     }
+    setLoading(false);
   };
 
   const handleCadastro = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nome.trim() || !cadEmail || !cadSenha) {
-      toast.error("Preencha os campos obrigatórios");
+      toast.error("preencha os campos obrigatórios");
       return;
     }
     if (cadSenha.length < 6) {
-      toast.error("A senha deve ter no mínimo 6 caracteres");
+      toast.error("a senha deve ter no mínimo 6 caracteres");
       return;
     }
     if (cadSenha !== confirmarSenha) {
-      toast.error("As senhas não coincidem");
+      toast.error("as senhas não coincidem");
       return;
     }
+    setLoading(true);
+
     const res = await cadastrar({
       name: nome.trim(),
       email: cadEmail,
@@ -63,6 +72,8 @@ const Login = () => {
     if (res.success) {
       navigate("/");
     }
+
+    setLoading(false);
   };
 
   const tabClass = (t: string) =>
@@ -121,12 +132,12 @@ const Login = () => {
               />
               Lembrar de mim
             </label>
-            <button
+            <ButtonLoad
+              title="Entrar"
+              loading={loading}
               type="submit"
               className="w-full rounded-md bg-primary py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Entrar
-            </button>
+            />
           </form>
         ) : (
           <form onSubmit={handleCadastro} className="space-y-4">
@@ -178,12 +189,12 @@ const Login = () => {
                 placeholder="••••••"
               />
             </div>
-            <button
+            <ButtonLoad
+              title="Criar conta"
+              loading={loading}
               type="submit"
               className="w-full rounded-md bg-primary py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Criar conta
-            </button>
+            />
           </form>
         )}
       </div>
