@@ -108,13 +108,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         body: dataForm,
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
       const data = await res.json();
 
       if (data.success) {
         setUser(data.user);
         toast.success(data.message);
+      } else {
+        toast.error(data.message);
+        return { success: false, message: data.message };
       }
 
       return data;
@@ -163,14 +164,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         body: dataForm,
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
       const data = await res.json();
 
       if (data.success) {
         toast.success(data.message);
 
         checkAuthStatus();
+      } else {
+        toast.error(data.message);
+        return { success: false, message: data.message };
       }
 
       return data;
